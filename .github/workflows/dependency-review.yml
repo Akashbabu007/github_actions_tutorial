@@ -1,0 +1,24 @@
+name: Dependency Review
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  dependency-review:
+    runs-on: ubuntu-latest
+    steps:
+      # Step 1: Checkout the pull request code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Step 2: Run Dependency Review Action
+      - name: Dependency Review
+        uses: actions/dependency-review-action@v2
+        with:
+          fail-on-severity: moderate # Fail for moderate, high, and critical severities
