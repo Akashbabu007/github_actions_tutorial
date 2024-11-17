@@ -19,6 +19,6 @@ jobs:
 
       # Step 2: Run Dependency Review Action
       - name: Dependency Review
-        uses: github/dependency-review-action@v2
+        uses: actions/dependency-review-action@v2
         with:
           fail-on-severity: moderate # Fail for moderate, high, and critical severities
