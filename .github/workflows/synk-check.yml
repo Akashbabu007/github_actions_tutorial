@@ -22,9 +22,17 @@ jobs:
           java-version: '11' # Use the Java version required by your project
 
       # Step 3: Install Maven
-      - name: Setup Maven Action
-        uses: s4u/setup-maven-action@v1.17.0
+      - name: Install Maven
+        run: sudo apt-get update && sudo apt-get install -y maven
 
       # Step 4: Install Snyk Maven Plugin and Run Scan
       - name: Run Snyk Maven Plugin
         run: mvn io.snyk:snyk-maven-plugin:2.3.0:test -DseverityThreshold=high -DfailOnVulnerabilities=true
+
+      # Step 5: Run Maven Build (Optional: You can skip this if only Snyk scan is needed)
+      - name: Run Maven Build
+        run: mvn clean install -DskipTests
+
+      # Step 6: Run Snyk Test on the Maven project to find vulnerabilities
+      - name: Run Snyk Test
+        run: snyk test --severity-threshold=high || exit 1
