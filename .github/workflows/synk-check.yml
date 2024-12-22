@@ -22,8 +22,8 @@ jobs:
           java-version: '11' # Use the Java version required by your project
 
       # Step 3: Install Maven
-      - name: Install Maven
-        run: sudo apt-get update && sudo apt-get install -y maven
+      - name: Setup Maven Action
+        uses: s4u/setup-maven-action@v1.17.0
 
       # Step 4: Install Snyk Maven Plugin and Run Scan
       - name: Run Snyk Maven Plugin
