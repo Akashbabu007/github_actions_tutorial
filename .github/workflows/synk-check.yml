@@ -6,11 +6,11 @@ on:
       - main
 
 jobs:
-  snyk-scan:
+  snyk-dependency-check:
     runs-on: ubuntu-latest
 
     steps:
-      # Step 1: Check out the code
+      # Step 1: Check out code
       - name: Check out code
         uses: actions/checkout@v3
 
@@ -19,20 +19,25 @@ jobs:
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
-          java-version: '11' # Use the Java version required by your project
+          java-version: '11'
 
       # Step 3: Install Maven
       - name: Install Maven
         run: sudo apt-get update && sudo apt-get install -y maven
 
-      # Step 4: Install Snyk Maven Plugin and Run Scan
-      - name: Run Snyk Maven Plugin
-        run: mvn io.snyk:snyk-maven-plugin:2.3.0:test -DseverityThreshold=high -DfailOnVulnerabilities=true
+      # Step 4: Install Snyk CLI globally using npm
+      - name: Install Snyk CLI
+        run: npm install -g snyk
 
-      # Step 5: Run Maven Build (Optional: You can skip this if only Snyk scan is needed)
+      # Step 6: Run Maven Build (optional)
       - name: Run Maven Build
         run: mvn clean install -DskipTests
 
-      # Step 6: Run Snyk Test on the Maven project to find vulnerabilities
+      # Step 7: Run Snyk Test to find vulnerabilities in your Maven dependencies
       - name: Run Snyk Test
-        run: snyk test --severity-threshold=high || exit 1
+        run: snyk test --all-projects
+
+      # Step 8: Fail the build if vulnerabilities are found (severe vulnerabilities)
+      - name: Fail the build if vulnerabilities are found
+        run: |
+          snyk test --all-projects --severity-threshold=high || exit 1
