@@ -27,7 +27,7 @@ jobs:
 
       # Step 4: Install Snyk Maven Plugin and Run Scan
       - name: Run Snyk Maven Plugin
-        run: mvn org.snyk.tools:snyk-maven-plugin:2.3.0
+        run: mvn io.snyk:snyk-maven-plugin:2.3.0
 
       # Step 5: Run Maven Build (Optional: You can skip this if only Snyk scan is needed)
       - name: Run Maven Build
