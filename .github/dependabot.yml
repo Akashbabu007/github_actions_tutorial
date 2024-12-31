@@ -1,0 +1,19 @@
+name: Dependabot
+on:
+  schedule:
+    - cron: '11 11 * * 1'
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  dependabot-maven:
+    uses: some path
+    secrets:
+      DEPENDABOT_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
+  dependabot-npm:
+    uses: some path
+    with:
+      package-manager: npm_and_yarn
+      dependencies-file-path: /ui
+    secrets:
+      DEPENDABOT_TOKEN: ${{ secrets.DEPENDABOT_TOKEN }}
