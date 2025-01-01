@@ -22,7 +22,14 @@ jobs:
         with:
           ruby-version: 2.7 # Dependabot-core requires Ruby 2.7
 
-      # Run Dependabot-core in Docker
+      # Build Dependabot-Core Docker Image
+      - name: Build Dependabot Core Docker Image
+        run: |
+          git clone https://github.com/dependabot/dependabot-core.git
+          cd dependabot-core
+          docker build -t dependabot/dependabot-core .
+
+      # Run Dependabot Core
       - name: Run Dependabot Core
         run: |
           docker run --rm \
