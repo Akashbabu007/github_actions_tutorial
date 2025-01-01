@@ -1,0 +1,27 @@
+name: Dependabot Maven Dependency Check
+
+on:
+  workflow_dispatch:
+
+jobs:
+  dependabot-maven:
+    runs-on: ubuntu-latest
+    steps:
+      # Checkout the repository
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Run Dependabot-Core Docker image
+      - name: Run Dependabot Maven
+        run: |
+          docker run --rm \
+            -v "$(pwd)":/home/dependabot/dependabot-updater \
+            -e PACKAGE_MANAGER=maven \
+            -e PROJECT_PATH="/" \
+            -e GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
+            ghcr.io/dependabot/dependabot-core
+
+      # Optional: Analyze and report
+      - name: Analyze Vulnerabilities (Optional)
+        run: |
+          echo "Dependabot-Core has completed the check for Maven dependencies."
