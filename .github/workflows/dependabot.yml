@@ -1,7 +1,9 @@
 name: Dependabot Maven Dependency Check
 
 on:
-  workflow_dispatch:
+  pull_request:
+    branches:
+      - main
 
 jobs:
   dependabot-maven:
