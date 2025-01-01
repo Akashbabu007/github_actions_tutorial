@@ -1,29 +1,32 @@
-name: Dependabot Maven Dependency Check
+name: Run Dependabot Core
 
 on:
-  pull_request:
+  push:
     branches:
       - main
+  pull_request:
+  workflow_dispatch:
 
 jobs:
-  dependabot-maven:
+  dependabot-check:
     runs-on: ubuntu-latest
+
     steps:
-      # Checkout the repository
-      - name: Checkout code
+      # Checkout the code
+      - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Run Dependabot-Core Docker image
-      - name: Run Dependabot Maven
+      # Set up Ruby
+      - name: Set up Ruby
+        uses: ruby/setup-ruby@v1
+        with:
+          ruby-version: 2.7 # Dependabot-core requires Ruby 2.7
+
+      # Run Dependabot-core in Docker
+      - name: Run Dependabot Core
         run: |
           docker run --rm \
-            -v "$(pwd)":/home/dependabot/dependabot-updater \
-            -e PACKAGE_MANAGER=maven \
-            -e PROJECT_PATH="/" \
-            -e GITHUB_ACCESS_TOKEN="${{ secrets.GITHUB_TOKEN }}" \
-            ghcr.io/dependabot/dependabot-core
-
-      # Optional: Analyze and report
-      - name: Analyze Vulnerabilities (Optional)
-        run: |
-          echo "Dependabot-Core has completed the check for Maven dependencies."
+              -v "$(pwd):/home/dependabot/dependabot-script" \
+              -w "/home/dependabot/dependabot-script" \
+              dependabot/dependabot-core \
+              bundle exec ruby ./update_script.rb
