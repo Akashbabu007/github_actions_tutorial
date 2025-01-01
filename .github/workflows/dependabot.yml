@@ -1,0 +1,39 @@
+name: Run Dependabot Core
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  dependabot-check:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Checkout the code
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Clone Dependabot-Core Repository
+      - name: Clone Dependabot-Core
+        run: git clone https://github.com/dependabot/dependabot-core.git
+
+      # Build Dependabot-Core Docker Image
+      - name: Build Docker Image
+        run: |
+          ls
+          cd dependabot-core
+          ls
+          ls -l Dockerfile
+          docker build -t dependabot/dependabot-core .
+
+      # Run Dependabot Core
+      - name: Run Dependabot Core
+        run: |
+          docker run --rm \
+          -v "$(pwd):/home/dependabot/dependabot-script" \
+          -w "/home/dependabot/dependabot-script" \
+          dependabot/dependabot-core \
+          bundle exec ruby ./update_script.rb
