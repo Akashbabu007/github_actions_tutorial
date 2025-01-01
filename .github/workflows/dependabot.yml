@@ -16,17 +16,17 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      # Set up Ruby
-      - name: Set up Ruby
-        uses: ruby/setup-ruby@v1
-        with:
-          ruby-version: 2.7 # Dependabot-core requires Ruby 2.7
+      # Clone Dependabot-Core Repository
+      - name: Clone Dependabot-Core
+        run: git clone https://github.com/dependabot/dependabot-core.git
 
       # Build Dependabot-Core Docker Image
-      - name: Build Dependabot Core Docker Image
+      - name: Build Docker Image
         run: |
-          git clone https://github.com/dependabot/dependabot-core.git
-          cd dependabot-core
+          ls
+          cd dependabot-core/dependabot-script
+          ls
+          ls -l Dockerfile
           docker build -t dependabot/dependabot-core .
 
       # Run Dependabot Core
