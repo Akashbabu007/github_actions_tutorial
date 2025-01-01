@@ -24,7 +24,7 @@ jobs:
       - name: Build Docker Image
         run: |
           ls
-          cd dependabot-core/dependabot-script
+          cd dependabot-core
           ls
           ls -l Dockerfile
           docker build -t dependabot/dependabot-core .
